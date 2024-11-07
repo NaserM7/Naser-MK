@@ -1,0 +1,61 @@
+from ebookstore_manager import EbookstoreManager
+
+class Client:
+    """
+    Represents a customer (client) of the e-bookstore who can browse, add items to cart, and purchase books.
+    """
+    def __init__(self, manager, customer_id):
+        self.manager = manager
+        self.customer_id = customer_id
+
+    def add_to_cart(self, book_title, quantity):
+        """
+        Customer adds a specified quantity of a book to their cart.
+        """
+        self.manager.add_to_cart(self.customer_id, book_title, quantity)
+
+    def remove_from_cart(self, book_title):
+        """
+        Customer removes a book from their cart.
+        """
+        self.manager.remove_from_cart(self.customer_id, book_title)
+
+    def view_cart(self):
+        """
+        Displays the contents of the customer's cart in an organized table format using padding.
+        """
+        customer = self.manager.customers.get(self.customer_id)
+        if customer:
+            # Print header
+            print(f"{'Book Title':<30} {'Quantity':<10} {'Price per Unit':<15} {'Total Price':<15}")
+            print("-" * 70)  # Separator line
+
+            # Loop through the cart items and display them in a formatted way
+            for item, qty in customer.get_cart().items.items():
+                title = item.get_title()
+                price = item.get_price()
+                total_price = price * qty
+                print(f"{title:<30} {qty:<10} ${price:<14.2f} ${total_price:<14.2f}")
+        else:
+            print("Customer not found.")
+
+
+    def print_invoice(self):
+        """
+        Customer prints the invoice for their current cart.
+        """
+        self.manager.print_invoice(self.customer_id)
+
+    def empty_cart(self):
+        """
+        Customer empties their cart.
+        """
+        self.manager.empty_cart(self.customer_id)
+
+
+    def print_all_books(self):
+        """
+        Customer print all books
+        """
+        self.manager.print_all_books()
+
