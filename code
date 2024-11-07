@@ -1,0 +1,73 @@
+# test_ebookstore.py
+
+from ebookstore_manager import EbookstoreManager
+from admin import Admin
+from client import Client
+
+def test_ebookstore():
+    # Step 1: Initialize the EbookstoreManager
+    manager = EbookstoreManager()
+
+    # Step 2: Create an Admin instance to manage customers and books
+    admin = Admin(manager)
+    
+    # Step 3: Test Admin functionalities
+    print("Testing Admin functionalities:")
+    
+    # Add a customer
+    admin.add_customer(customer_id="C001", name="Alice Smith", contact_info="alice@example.com", is_loyalty_member=True)
+    admin.add_customer(customer_id="C002", name="Bob Brown", contact_info="bob@example.com", is_loyalty_member=False)
+    
+    # display all customer
+    admin.print_all_customers()
+
+
+    # Add books to the catalog
+    admin.add_book(title="Python Programming", author="John Doe", genre="Programming", price=39.99)
+    admin.add_book(title="Data Science Essentials", author="Jane Roe", genre="Data Science", price=49.99)
+    
+
+    admin.print_all_books()
+    
+    # Remove a customer and book
+    admin.remove_customer("C002")
+    admin.remove_book("Data Science Essentials")
+
+    #add again the book for testing
+    admin.add_book(title="Data Science Essentials", author="Jane Roe", genre="Data Science", price=49.99)
+    
+    # Step 4: Create a Client instance for the added customer
+    client = Client(manager, customer_id="C001")
+    
+    # Step 5: Test Client functionalities
+    print("\nTesting Client functionalities:")
+
+    client.print_all_books()
+    
+    # Add books to the cart
+    client.add_to_cart("Python Programming", 1)
+    client.add_to_cart("Data Science Essentials", 5)  
+    
+    # View cart to verify items
+    print("\nCart Contents for Client:")
+    client.view_cart()
+    
+    # Generate and print the invoice
+    print("\nInvoice for Client:")
+    client.print_invoice()
+    
+    # View cart after checkout to ensure it's empty
+    print("\nCart Contents after Checkout:")
+    client.view_cart()
+    
+    # Add another item and test cart clearing functionality
+    client.add_to_cart("Python Programming", 1)
+    print("\nCart Contents before Emptying:")
+    client.view_cart()
+    
+    client.empty_cart()
+    print("\nCart Contents after Emptying:")
+    client.view_cart()
+
+if __name__ == "__main__":
+    test_ebookstore()
