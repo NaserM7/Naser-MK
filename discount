@@ -1,0 +1,25 @@
+# discount.py
+
+class Discount:
+    """
+    Calculates applicable discounts based on loyalty status and bulk purchases.
+    """
+    LOYALTY_DISCOUNT_RATE = 0.10
+    BULK_DISCOUNT_RATE = 0.20
+    BULK_THRESHOLD = 5
+
+    def calculate_loyalty_discount(self, order_total):
+        return order_total * Discount.LOYALTY_DISCOUNT_RATE
+
+    def calculate_bulk_discount(self, total_quantity, order_total):
+        if total_quantity >= Discount.BULK_THRESHOLD:
+            return order_total * Discount.BULK_DISCOUNT_RATE
+        return 0
+
+    def apply_discounts(self, order,custo):
+        total_discount = 0
+        if order.total_quantity >= Discount.BULK_THRESHOLD:
+            total_discount += self.calculate_bulk_discount(order.get_total_quantity(), order.get_order_total())
+        if custo.is_loyal_member():
+            total_discount += self.calculate_loyalty_discount(order.get_order_total())
+        return total_discount
