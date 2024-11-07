@@ -1,0 +1,20 @@
+# payment.py
+
+from invoice import Invoice
+
+class Payment:
+    """
+    Processes payment by applying discounts, calculating VAT, and generating an invoice.
+    """
+    def __init__(self, order, discount,custo):
+        self.order = order
+        self.discount = discount
+        self.custo = custo
+        self.invoice = None
+
+    def process_payment(self):
+        discount_amount = self.discount.apply_discounts(self.order,self.custo)
+        self.invoice = Invoice(self.order, discount_amount)
+
+    def print_invoice(self):
+        self.invoice.display_invoice()
