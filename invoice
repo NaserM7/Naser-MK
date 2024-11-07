@@ -1,0 +1,39 @@
+# invoice.py
+
+class Invoice:
+    """
+    Generates a formatted invoice for the customer's order, including VAT and discounts.
+    """
+    VAT_RATE = 0.08
+
+    def __init__(self, order, discount_amount):
+        self.order = order
+        self.discount_amount = discount_amount
+        self.vat_amount = self.calculate_vat()
+        self.final_amount = self.calculate_final_amount()
+
+    def calculate_vat(self):
+        return (self.order.get_order_total() - self.discount_amount) * Invoice.VAT_RATE
+
+    def calculate_final_amount(self):
+        return self.order.get_order_total() - self.discount_amount + self.vat_amount
+
+    def display_invoice(self):
+        # Print header
+        print("\n" + "="*50)
+        print(f"{'Item':<20}{'Quantity':<10}{'Unit Price':<10}{'Total Price':<10}")
+        print("-"*50)
+
+        # Print each item
+        for book, quantity in self.order.order_items.items():
+            total_price = book.get_price() * quantity
+            print(f"{book.get_title():<20}{quantity:<10}{book.get_price():<10.2f}{total_price:<10.2f}")
+
+        # Print footer with discounts, VAT, and final total
+        print("-"*50)
+        print(f"{'Subtotal':<40}{self.order.get_order_total():<10.2f}")
+        print(f"{'Discount':<40}-{self.discount_amount:<10.2f}")
+        print(f"{'VAT (8%)':<40}+{self.vat_amount:<10.2f}")
+        print("="*50)
+        print(f"{'Total':<40}{self.final_amount:<10.2f}")
+        print("="*50 + "\n")
