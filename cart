@@ -1,0 +1,25 @@
+# cart.py
+
+class Cart:
+    """
+    Manages items added by the customer, with each itemâ€™s quantity.
+    """
+    def __init__(self):
+        self.items = {}
+
+    def add_to_cart(self, book, quantity):
+        if book in self.items:
+            self.items[book] += quantity
+        else:
+            self.items[book] = quantity
+
+    def remove_from_cart(self, book):
+        if book in self.items:
+            del self.items[book]
+
+    def update_quantity(self, book, new_quantity):
+        if book in self.items:
+            self.items[book] = new_quantity
+
+    def get_cart_items(self):
+        return self.items
