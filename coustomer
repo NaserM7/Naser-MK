@@ -1,0 +1,33 @@
+from cart import Cart
+
+class Customer:
+    """
+    Represents a customer in the e-bookstore system.
+    """
+    def __init__(self, customer_id, name, contact_info, is_loyalty_member=False):
+        self.customer_id = customer_id
+        self.name = name
+        self.contact_info = contact_info
+        self.is_loyalty_member = is_loyalty_member
+        self.cart = Cart()  
+
+    def get_customer_id(self):
+        return self.customer_id
+
+    def get_name(self):
+        return self.name
+
+    def get_contact_info(self):
+        return self.contact_info
+
+    def set_contact_info(self, new_info):
+        self.contact_info = new_info
+
+    def is_loyal_member(self):
+        return self.is_loyalty_member
+
+    def get_cart(self):
+        return self.cart
+
+    def set_cart(self, new_cart):
+        self.cart = new_cart
