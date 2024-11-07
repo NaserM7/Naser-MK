@@ -1,0 +1,15 @@
+# order.py
+
+class Order:
+    """
+    Represents a customer's order, which includes items and quantities.
+    """
+    def __init__(self, cart):
+        self.order_items = cart.get_cart_items()
+        self.total_quantity = sum(self.order_items.values())
+
+    def get_order_total(self):
+        return sum(book.get_price() * qty for book, qty in self.order_items.items())
+
+    def get_total_quantity(self):
+        return self.total_quantity
