@@ -1,0 +1,160 @@
+from customer import Customer
+from book import Book
+from order import Order
+from payment import Payment
+from discount import Discount
+from cart import Cart
+
+class EbookstoreManager:
+    """
+    Central class to manage all functionalities of the e-bookstore, 
+    including customer management, cart operations, discount application, 
+    and invoice generation.
+    """
+    def __init__(self):
+        self.customers = {}
+        self.books = {}
+        self.discount = Discount()
+
+    # Customer management
+    def add_customer(self, customer_id, name, contact_info, is_loyalty_member=False):
+        """
+        Adds a new customer to the system with a unique cart.
+        """
+        customer = Customer(customer_id, name, contact_info, is_loyalty_member)
+        self.customers[customer_id] = customer
+        print(f"Customer '{name}' with ID '{customer_id}' added successfully.")
+
+    def remove_customer(self, customer_id):
+        """
+        Removes an existing customer from the system by ID.
+        """
+        if customer_id in self.customers:
+            del self.customers[customer_id]
+            print(f"Customer with ID '{customer_id}' removed successfully.")
+        else:
+            print(f"Customer with ID '{customer_id}' not found.")
+
+    # Book management
+    def add_book(self, title, author, genre, price):
+        """
+        Adds a new book to the store's catalog.
+        """
+        book = Book(title, author, genre, price)
+        self.books[title] = book
+        print(f"Book '{title}' added to the catalog.")
+
+    def remove_book(self, title):
+        """
+        Removes a book from the store's catalog.
+        """
+        if title in self.books:
+            del self.books[title]
+            print(f"Book '{title}' removed from the catalog.")
+        else:
+            print(f"Book '{title}' not found in the catalog.")
+
+    # Shopping cart operations
+    def add_to_cart(self, customer_id, book_title, quantity):
+        """
+        Adds a specified quantity of a book to a customer's cart.
+        """
+        customer = self.customers.get(customer_id)
+        book = self.books.get(book_title)
+        if customer and book:
+            customer.get_cart().add_to_cart(book, quantity)
+            print(f"Added {quantity} of '{book_title}' to {customer.name}'s cart.")
+        else:
+            print("Customer or book not found.")
+
+    def remove_from_cart(self, customer_id, book_title):
+        """
+        Removes a book from a customer's cart.
+        """
+        customer = self.customers.get(customer_id)
+        book = self.books.get(book_title)
+        if customer and book:
+            customer.get_cart().remove_from_cart(book)
+            print(f"Removed '{book_title}' from {customer.name}'s cart.")
+        else:
+            print("Customer or book not found.")
+
+    def empty_cart(self, customer_id):
+        """
+        Empties the cart of the specified customer.
+        """
+        customer = self.customers.get(customer_id)
+        if customer:
+            customer.set_cart(Cart())  # Assign a new empty cart to the customer
+            print(f"{customer.name}'s cart has been emptied.")
+        else:
+            print(f"Customer with ID '{customer_id}' not found.")
+
+    # Invoice generation
+    def print_invoice(self, customer_id):
+        """
+        Prints the invoice for a customer's current cart, applying discounts and displaying totals.
+        """
+        customer = self.customers.get(customer_id)
+        if customer:
+            # Create an order based on the customer's cart
+            order = Order(customer.get_cart())
+            
+            # Apply discounts
+            discount_amount = self.discount.apply_discounts(order,customer)
+            
+            # Process payment and generate invoice
+            payment = Payment(order, self.discount,customer)
+            payment.process_payment()
+
+            # Print formatted invoice
+            payment.print_invoice()
+
+            # Optionally empty the cart after generating the invoice
+            self.empty_cart(customer_id)
+        else:
+            print(f"Customer with ID '{customer_id}' not found.")
+
+            
+    def print_all_customers(self):
+        """
+        Prints details of all customers in the system in an organized table format.
+        """
+        if not self.customers:
+            print("No customers found.")
+        else:
+            # Print header
+            print("\n" + "*" * 100)
+            print(f"{'All Customers:':^100}")
+            print("*" * 100)
+            print(f"{'Customer ID':<20} {'Name':<30} {'Contact Info':<30} {'Loyalty Member':<15}")
+            print("-" * 100)
+
+            # Loop through customers and display them in a formatted way
+            for customer in self.customers.values():
+                print(f"{customer.customer_id:<20} {customer.name:<30} {customer.contact_info:<30} {str(customer.is_loyalty_member):<15}")
+            
+            print("-" * 100)
+            print("\n")
+
+
+    def print_all_books(self):
+        """
+        Prints details of all books in the store's catalog in an organized table format.
+        """
+        if not self.books:
+            print("No books found in the catalog.")
+        else:
+            # Print header
+            print("\n" + "*" * 100)
+            print(f"{'All Books in Catalog:':^100}")
+            print("*" * 100)
+            print(f"{'Title':<30} {'Author':<25} {'Genre':<20} {'Price':<15}")
+            print("-" * 100)
+
+            # Loop through books and display them in a formatted way
+            for book in self.books.values():
+                print(f"{book.title:<30} {book.author:<25} {book.genre:<20} ${book.price:<14.2f}")
+
+            print("-" * 100)
+            print("\n")
