@@ -1,0 +1,45 @@
+from ebookstore_manager import EbookstoreManager
+
+class Admin:
+    """
+    Represents an administrator who can manage customers and books in the e-bookstore.
+    """
+    def __init__(self, manager):
+        self.manager = manager
+
+    def add_customer(self, customer_id, name, contact_info, is_loyalty_member=False):
+        """
+        Admin adds a customer to the system.
+        """
+        self.manager.add_customer(customer_id, name, contact_info, is_loyalty_member)
+
+    def remove_customer(self, customer_id):
+        """
+        Admin removes a customer from the system.
+        """
+        self.manager.remove_customer(customer_id)
+
+    def add_book(self, title, author, genre, price):
+        """
+        Admin adds a book to the catalog.
+        """
+        self.manager.add_book(title, author, genre, price)
+
+    def remove_book(self, title):
+        """
+        Admin removes a book from the catalog.
+        """
+        self.manager.remove_book(title)
+
+    def print_all_customers(self):
+        """
+        Admin removes a book from the catalog.
+        """
+        self.manager.print_all_customers()
+
+    def print_all_books(self):
+        """
+        Admin removes a book from the catalog.
+        """
+        self.manager.print_all_books()
+
