@@ -1,0 +1,27 @@
+# book.py
+
+class Book:
+    """
+    Represents an e-book with details such as title, author, genre, and price.
+    """
+    def __init__(self, title, author, genre, price):
+        self.title = title
+        self.author = author
+        self.genre = genre
+        self.price = price
+
+    def get_title(self):
+        return self.title
+
+    def get_author(self):
+        return self.author
+
+    def get_genre(self):
+        return self.genre
+
+    def get_price(self):
+        return self.price
+
+    def set_price(self, new_price):
+        self.price = new_price
+      
